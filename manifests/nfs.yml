@@ -1,0 +1,56 @@
+---
+name: nfs
+
+stemcells:
+  - alias:   default
+    os:      ubuntu-xenial
+    version: latest
+
+instance_groups:
+  - name: server
+    instances: 1
+    vm_type: default
+    persistent_disk: 10_240
+    stemcell: default
+    azs: [z1]
+    networks:
+      - name: default
+    jobs:
+      - name: nfs-server
+        release: nfs
+        properties:
+          exports:
+            - path: volume1
+
+      - name: nfs-client
+        release: nfs
+        properties:
+          mounts:
+            - server: 127.0.0.1
+              remote: volume1
+              local:  /tmp/v1
+
+  - name: client
+    instances: 1
+    vm_type: default
+    persistent_disk: 10_240
+    stemcell: default
+    azs: [z1]
+    networks:
+      - name: default
+    jobs:
+      - name: nfs-client
+        release: nfs
+
+update:
+  canaries: 1
+  max_in_flight: 50
+  serial: false
+  canary_watch_time: 1000-60000
+  update_watch_time: 1000-60000
+
+releases:
+- name: nfs
+  version: latest
+  #url: https://github.com/cloudfoundry-community/docker-registry-boshrelease/releases/download/v3.4.0/docker-registry-3.4.0.tgz
+  #sha1: e769d4a9ebd410a327088f75d9e3e482b4788801

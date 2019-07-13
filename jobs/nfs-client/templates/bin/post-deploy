@@ -1,0 +1,28 @@
+#!/bin/bash
+set -eu
+exec 2>&1
+echo "[$(date)] post-deploy script starting up"
+
+echo "[$(date)] mounting any DELAYED remote NFS mounts"
+<% p('mounts', []).each do |m|
+     server = m['server']
+     remote = m['remote']
+     if remote[0] != '/'
+       remote = "/var/vcap/store/#{remote}"
+     end
+     local  = m['local']
+     if local[0] != '/'
+       local = "/var/vcap/data/remote/#{local}"
+     end
+
+     if (m['when'] || '') != 'immediate' %>
+mkdir -p <%= local %>
+if ! mount <%= server %>:<%= remote %> <%= local %>; then
+  echo "failed to mount '<%= server %>:<%= remote %>' to '<%= local %>'; exiting..."
+  exit 1
+fi
+<%   end
+   end %>
+
+echo "[$(date)] DONE"
+exit 0

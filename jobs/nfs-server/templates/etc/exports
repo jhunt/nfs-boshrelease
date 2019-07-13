@@ -1,0 +1,21 @@
+<%
+  p('exports', []).each do |x|
+    path = x['path']
+    if path[0] != '/'
+      path = "/var/vcap/store/#{path}"
+    end
+
+    options = x['options'] || []
+    if options.length == 0
+      options = %w(rw fsid=0 no_subtree_check sync)
+    end
+
+    options << 'all_squash'
+    options << 'anonuid=$VCAP_UID'
+    options << 'anongid=$VCAP_GID'
+
+    clients = (x['clients'] || ['*']).compact.uniq
+%><%= path %> <%= clients.map { |who| "#{who}(#{options.join(',')})" }.join(' ') %>
+<%
+  end
+%>

@@ -1,0 +1,64 @@
+#!/bin/bash
+set -eu
+exec 2>&1
+echo "[$(date)] pre-start script starting up"
+
+inst() {
+  echo " - checking for $2 ..."
+  dpkg -s $2 >/dev/null || dpkg --force-confdef -i /var/vcap/packages/nfs-debs/nfs-$1-debs/$3
+}
+
+codename=$(lsb_release -sc)
+case "$codename" in
+trusty)
+  echo "$(date) installing NFS packages"
+  (
+    flock -x 200
+    inst $codename rpcbind           rpcbind_0.2.1-2ubuntu2.2_amd64.deb
+    inst $codename keyutils          libkeyutils1_1.5.6-1_amd64.deb
+    inst $codename libevent-2.0-5    libevent-2.0-5_2.0.21-stable-1ubuntu1.14.04.2_amd64.deb
+    inst $codename libnfsidmap2      libnfsidmap2_0.25-5_amd64.deb
+    inst $codename nfs-common        nfs-common_1.2.8-6ubuntu1.2_amd64.deb
+  ) 200>/var/vcap/data/dpkg.lock
+  ;;
+xenial)
+  echo "$(date) installing NFS packages"
+  (
+    flock -x 200
+    inst $codename rpcbind           rpcbind_0.2.3-0.2_amd64.deb
+    inst $codename keyutils          keyutils_1.5.9-8ubuntu1_amd64.deb
+    inst $codename libevent-2.0-5    libevent-2.0-5_2.0.21-stable-2ubuntu0.16.04.1_amd64.deb
+    inst $codename libnfsidmap2      libnfsidmap2_0.25-5_amd64.deb
+    inst $codename nfs-common        nfs-common_1.2.8-9ubuntu12_amd64.deb
+  ) 200>/var/vcap/data/dpkg.lock
+  ;;
+*)
+  echo "This version of the BOSH Stemcell ($codename) is not supported!"
+  lsb_release --all | sed -e 's/^/  /'
+  exit 1
+  ;;
+esac
+
+echo "[$(date)] mounting any IMMEDIATE remote NFS mounts"
+<% p('mounts', []).each do |m|
+     server = m['server']
+     remote = m['remote']
+     if remote[0] != '/'
+       remote = "/var/vcap/store/#{remote}"
+     end
+     local  = m['local']
+     if local[0] != '/'
+       local = "/var/vcap/data/remote/#{local}"
+     end
+
+     if (m['when'] || '') == 'immediate' %>
+mkdir -p <%= local %>
+if ! mount <%= server %>:<%= remote %> <%= local %>; then
+  echo "failed to mount '<%= server %>:<%= remote %>' to '<%= local %>'; exiting..."
+  exit 1
+fi
+<%   end
+   end %>
+
+echo "[$(date)] DONE"
+exit 0

@@ -1,0 +1,24 @@
+---
+name: nfs-client
+
+description: |
+  The nfs-client job provides the necessary packages to allow volumes
+  to be mounted from other servers via NFS.
+
+templates:
+  bin/pre-start:   bin/pre-start
+  bin/post-deploy: bin/post-deploy
+
+packages:
+  - nfs-debs
+
+properties:
+  mounts:
+    description: |
+      A list of remote volumes to mount.  Each item must have the
+      `server` (IP or hostname of the NFS server), `remote` (remote
+      volume directory path), and `local` (local mount point) keys.
+
+      By default, mounts will be done in the post-deploy hook.
+      You can instead force them earlier, in the pre-start hook,
+      by setting the `when` key to the value "immediate".

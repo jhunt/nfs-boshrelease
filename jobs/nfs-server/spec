@@ -1,0 +1,45 @@
+---
+name: nfs-server
+
+description: |
+  The nfs-server job provides the necessary package and kernel instrumentation
+  to export arbitrary mountpoints over NFS, probably to boxes that are also
+  co-locating the nfs-client job.
+
+templates:
+  bin/pre-start:  bin/pre-start
+  bin/post-stop:  bin/post-stop
+  etc/exports:    etc/exports
+
+packages:
+  - nfs-debs
+
+properties:
+ exports:
+    description: |
+      A list of directories to be exported to clients.  This will be used to
+      create the /etc/exports file routinely used by NFS servers to control
+      access, uid/gid mapping, etc.
+
+      Each entry in the list must have a `path` key (containing the absolute
+      path to the export, server-side), and a `clients` key (containing a list of
+      hostnames and or network addresses / ranges from which clients can connect).
+
+      Relative `path` values will be interpreted as relative to `/var/vcap/store`.
+
+      Each entry may feature an `options` key: a list of NFS options to be applied
+      to the exporrted filesystem.  If no options are listed, the following are
+      assumed:
+
+        - `rw`
+        - `fsid=0`
+        - `no_subtree_check`
+        - `sync`
+
+      Refer to the `exports(5)` man page for more details.  Note that if you
+      do supply `options`, these defaults will not be included unless you
+      explicitly add them back in.
+
+      Some options are set regardless of what you put in the manifest, mainly to
+      handle BOSH-isms.  All UID/GIDs will be remapped to vcap:vcap (locally),
+      via `all_squash` and the appropriate `anonuid=` / `anongid=` settings.
