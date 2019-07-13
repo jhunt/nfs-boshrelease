@@ -7,7 +7,7 @@
 
     options = x['options'] || []
     if options.length == 0
-      options = %w(rw fsid=0 no_subtree_check sync)
+      options = %w(rw no_subtree_check sync)
     end
 
     options << 'all_squash'

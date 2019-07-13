@@ -32,7 +32,6 @@ properties:
       assumed:
 
         - `rw`
-        - `fsid=0`
         - `no_subtree_check`
         - `sync`
 
