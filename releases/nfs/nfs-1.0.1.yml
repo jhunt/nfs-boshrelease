@@ -1,0 +1,23 @@
+name: nfs
+version: 1.0.1
+commit_hash: fd8b5c0
+uncommitted_changes: false
+jobs:
+- name: nfs-client
+  version: 90a467de2f7624cd7cb7158fae580491d0e47e12
+  fingerprint: 90a467de2f7624cd7cb7158fae580491d0e47e12
+  sha1: 999bd1a03b16a72affeb2e3f61da1c0d34653803
+- name: nfs-server
+  version: 00b296cf578e5ce31db1d7fe84fdf00c159edb1f
+  fingerprint: 00b296cf578e5ce31db1d7fe84fdf00c159edb1f
+  sha1: 9c3298ceda01355fbb59c9d8b0cf121e713f5fbc
+packages:
+- name: nfs-debs
+  version: a5c163dd190a3c22ba4ad120a211d228c3dc94ae
+  fingerprint: a5c163dd190a3c22ba4ad120a211d228c3dc94ae
+  sha1: 477513f8cc6840abe369b37ac94b584fec4cd0a0
+  dependencies: []
+license:
+  version: bbd2aa5e67f089c3de08f496c918853662413ca1
+  fingerprint: bbd2aa5e67f089c3de08f496c918853662413ca1
+  sha1: 184907bae259c17346e6fbd39a9ee734a1091335
