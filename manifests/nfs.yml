@@ -51,6 +51,6 @@ update:
 
 releases:
   - name:    nfs
-    version: 1.0.0
-    url:     https://github.com/jhunt/nfs-boshrelease/releases/download/v1.0.0/nfs-1.0.0.tgz
-    sha1:    b49edb492c1ab1bd64050d4eb4238bb9deb3d4ac
+    version: 1.0.1
+    url:     https://github.com/jhunt/nfs-boshrelease/releases/download/v1.0.1/nfs-1.0.1.tgz
+    sha1:    c1757433df172112caad8613653aaeab99cfc1e8
