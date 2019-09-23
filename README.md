@@ -2,13 +2,13 @@ NFS on BOSH
 ===========
 
 This BOSH release provides both halves of a working NFS volume
-share.  WIth it, you can build a BOSH-deployed NAS device,
+share.  With it, you can build a BOSH-deployed NAS device,
 exporting disk space attached to the NFS server VM to clients.
-You can also add in remote filesystem mount support to existing
+You can also add remote filesystem mount support to existing
 deployments, using the `nfs-client` job.
 
-This BOSH reelease supports both Trusty and Xenial stemcells, and
-can be trivially modified to supporrt other Linux-based operating
+This BOSH release supports both Trusty and Xenial stemcells, and
+can be trivially modified to support other Linux-based operating
 systems as needed.
 
 Configuring a Server
@@ -47,9 +47,8 @@ Here's an excerpt from a working manifest:
 Configuring a Client
 --------------------
 
-To support remote mounts of NFS volumes, all you need to do is
-colocate the `nfs-client` job alongside your other jobs and
-releases.
+To support remote mounts of NFS volumes, colocate the
+`nfs-client` job alongside your other jobs and releases.
 
 
     instance_groups:
