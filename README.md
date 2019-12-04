@@ -79,6 +79,27 @@ To support remote mounts of NFS volumes, colocate the
                   remote: /web/files
                   local:  /var/vcap/data/webfiles
 
+
+Running an NFS-v4 Server
+------------------------
+
+If you want to run only NFSv4 you can set the `nfsd_arguments` and
+`mountd_arguments` manifest properties, like so:
+
+    instance_groups:
+      - name: nas
+        jobs:
+          - name: nfs-server
+            release: nfs
+            properties:
+              nfsd_arguments:   -N 2 -N 3 -V 4
+              mountd_arguments: -N 2 -N 3 -V 4
+
+The `-N` argument instructs the `rpc.mountd` and `rpc.nfsd`
+processes to skip the named version (here v2 and v3).  The `-V`
+argument turns _on_ version 4.
+
+
 How Do I Contribute?
 --------------------
 

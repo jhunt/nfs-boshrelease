@@ -9,13 +9,31 @@ description: |
 templates:
   bin/pre-start:  bin/pre-start
   bin/post-stop:  bin/post-stop
+  etc/config.sed: etc/config.sed
   etc/exports:    etc/exports
 
 packages:
   - nfs-debs
 
 properties:
- exports:
+  nfsd_servers:
+    default: 8
+    description: |
+      How many instances of the in-kernel rpc.nfsd server process to run.
+
+  nfsd_arguments:
+    description: |
+      Command-line arguments to pass to the in-kernel rpc.nfsd (NFS itself) process.
+
+  mountd_arguments:
+    description: |
+      Command-line arguments to pass to the in-kernel rpc.mountd process.
+
+  statd_arguments:
+    description: |
+      Command-line arguments to pass to the in-kernel rpc.statd process.
+
+  exports:
     description: |
       A list of directories to be exported to clients.  This will be used to
       create the /etc/exports file routinely used by NFS servers to control

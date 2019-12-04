@@ -58,6 +58,14 @@ sed -e "s/\$VCAP_UID/$VCAP_UID/;s/\$VCAP_GID/$VCAP_GID/" \
        /var/vcap/jobs/nfs-server/etc/exports \
        > /etc/exports
 
+echo "[$(date)] configuring options [<%= p('nfsd_options', '') %>]..."
+if [[ ! -f /run/sysconfig/nfs-utils.orig ]]; then
+  cp /run/sysconfig/nfs-utils \
+     /run/sysconfig/nfs-utils.orig
+fi
+sed -f /var/vcap/jobs/nfs-server/etc/config.sed \
+  /run/sysconfig/nfs-utils.orig > /run/sysconfig/nfs-utils
+
 echo "[$(date)] starting up NFS..."
 /etc/init.d/nfs-kernel-server start
 exportfs -rav
