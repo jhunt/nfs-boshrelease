@@ -1,5 +1,5 @@
 ---
-name: nfs
+name: nfs4
 
 stemcells:
   - alias:   default
@@ -19,6 +19,8 @@ instance_groups:
       - name: nfs-server
         release: nfs
         properties:
+          nfsd_arguments:   -N 2 -N 3 -V 4
+          mountd_arguments: -N 2 -N 3 -V 4
           exports:
             - path: volume1
 
